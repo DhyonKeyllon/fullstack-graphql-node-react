@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-
 import { Navigate, useLocation } from "react-router-dom";
 
 import { useAuth } from "../contexts/AuthContext";
@@ -16,23 +14,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
-  if (isLoading)
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontSize: "18px",
-          color: "#666",
-        }}
-      >
-        Carregando...
-      </div>
-    );
-
-  if (isAuthenticated) {
+  if (!isLoading && isAuthenticated) {
     const from = location.state?.from?.pathname || redirectTo;
 
     return <Navigate to={from} replace />;
