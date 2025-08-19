@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Backend",
   "main": "handler.ts",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
-    "start": "NODE_ENV=local serverless offline --stage local",
+    "start": "NODE_ENV=local serverless offline --stage local --httpPort ${PORT:-3000}",
     "eslint": "eslint ./src --ext .ts,.js",
     "eslint:fix": "npm run prettier-format && eslint ./src --ext .ts,.tsx --quiet --fix",
     "prettier-format": "prettier --write .",
