@@ -8,31 +8,6 @@ Sistema completo de autenticação com GraphQL, React e Node.js construído como
 - **Yarn** package manager
 - **NVM** (recomendado para gerenciar versões do Node)
 
-## Estrutura do Projeto
-
-Este projeto é um monorepo construído com [Lerna](https://lerna.js.org/) que contém:
-
-```
-bondy-desafio-fullstack/
-├── packages/
-│   ├── backend/           # API GraphQL (Serverless + Apollo Server)
-│   │   ├── src/
-│   │   │   ├── graphql/   # Resolvers e configuração Apollo
-│   │   │   ├── models/    # Modelos MongoDB
-│   │   │   ├── typeDefs/  # Schema GraphQL
-│   │   │   └── memoryDB/  # Conexão MongoDB
-│   │   ├── package.json
-│   │   └── serverless.yml
-│   └── frontend/          # App React (Vite + TypeScript)
-│       ├── src/
-│       │   ├── pages/     # Páginas da aplicação
-│       │   └── styles/    # Estilos CSS
-│       ├── package.json
-│       └── vite.config.ts
-├── package.json           # Configuração raiz
-└── lerna.json
-```
-
 ## Instalação e Execução
 
 ### 1. Configurar Node.js 18
