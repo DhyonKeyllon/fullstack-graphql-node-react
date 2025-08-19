@@ -1,37 +1,14 @@
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { gql } from "@apollo/client";
 
-const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      success
-      message
-      user {
-        name
-        email
-        company
-      }
-    }
-  }
-`;
+import { useAuth } from "../hooks/useAuth";
 
-interface User {
-  name: string;
-  email: string;
-  company?: string;
-}
+import "../styles/LoginPage.css";
 
-interface LoginPageProps {
-  onLogin: (user: User) => void;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const [loginMutation, { loading }] = useMutation(LOGIN_MUTATION);
+  const { login, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,24 +16,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     if (!email || !password) {
       setError("Por favor, preencha todos os campos");
+
       return;
     }
 
     try {
-      const { data } = await loginMutation({
-        variables: { email, password },
-      });
+      const result = await login(email, password);
 
-      if (data?.login?.success) {
-        onLogin(data.login.user);
-      } else {
-        setError(data?.login?.message || "Erro ao fazer login");
-      }
+      if (!result.success) setError(result.message);
     } catch (error) {
       console.error("Erro no login:", error);
-      setError(
-        "Erro de conexão com o servidor. Verifique se o backend está executando.",
-      );
+
+      setError("Erro inesperado. Tente novamente.");
     }
   };
 
@@ -74,6 +45,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu email"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -86,11 +58,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Digite sua senha"
             required
+            disabled={isLoading}
           />
         </div>
 
-        <button type="submit" className="login-button" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
+        <button type="submit" className="login-button" disabled={isLoading}>
+          {isLoading ? "Entrando..." : "Entrar"}
         </button>
 
         {error && <div className="error-message">{error}</div>}

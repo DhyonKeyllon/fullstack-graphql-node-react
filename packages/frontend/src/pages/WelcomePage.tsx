@@ -1,19 +1,22 @@
-interface User {
-  name: string;
-  email: string;
-  company?: string;
-}
+import { useAuth } from "../hooks/useAuth";
 
-interface WelcomePageProps {
-  user: User;
-  onLogout: () => void;
-}
+const WelcomePage: React.FC = () => {
+  const { user, logout, getDisplayName, getUserInitials } = useAuth();
 
-const WelcomePage: React.FC<WelcomePageProps> = ({ user, onLogout }) => {
+  const handleLogout = () => {
+    logout();
+  };
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="welcome-container">
       <div className="welcome-card">
-        <h1>Bem-vindo!</h1>
+        <div className="user-avatar">{getUserInitials()}</div>
+
+        <h1>Bem-vindo, {getDisplayName()}!</h1>
         <p>Login realizado com sucesso!</p>
 
         <div className="user-info">
@@ -37,7 +40,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ user, onLogout }) => {
           )}
         </div>
 
-        <button className="logout-button" onClick={onLogout}>
+        <button className="logout-button" onClick={handleLogout}>
           Fazer Logout
         </button>
       </div>
