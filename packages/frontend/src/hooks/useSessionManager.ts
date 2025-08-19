@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -81,13 +81,24 @@ export const useSessionManager = () => {
     }
   }, [getToken]);
 
-  return {
-    saveToken,
-    getToken,
-    removeToken,
-    isTokenValid,
-    getUserFromToken,
-    isAuthenticated,
-    getTokenTimeRemaining,
-  };
+  return useMemo(
+    () => ({
+      saveToken,
+      getToken,
+      removeToken,
+      isTokenValid,
+      getUserFromToken,
+      isAuthenticated,
+      getTokenTimeRemaining,
+    }),
+    [
+      saveToken,
+      getToken,
+      removeToken,
+      isTokenValid,
+      getUserFromToken,
+      isAuthenticated,
+      getTokenTimeRemaining,
+    ],
+  );
 };

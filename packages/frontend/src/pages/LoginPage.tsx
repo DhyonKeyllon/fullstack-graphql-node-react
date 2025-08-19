@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -10,26 +11,32 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState("");
   const { login, isLoading } = useAuth();
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     if (!email || !password) {
       setError("Por favor, preencha todos os campos");
-
       return;
     }
 
     try {
       const result = await login(email, password);
 
-      if (!result.success) setError(result.message);
-    } catch (error) {
-      console.error("Erro no login:", error);
+      if (result.success) {
+        navigate("/welcome", { replace: true });
+        return;
+      }
 
+      setError(result.message);
+    } catch (error) {
       setError("Erro inesperado. Tente novamente.");
     }
   };
+
+  const isFormDisabled = isLoading;
 
   return (
     <div className="login-container">
@@ -45,7 +52,7 @@ const LoginPage: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu email"
             required
-            disabled={isLoading}
+            disabled={isFormDisabled}
           />
         </div>
 
@@ -58,11 +65,15 @@ const LoginPage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Digite sua senha"
             required
-            disabled={isLoading}
+            disabled={isFormDisabled}
           />
         </div>
 
-        <button type="submit" className="login-button" disabled={isLoading}>
+        <button
+          type="submit"
+          className={"login-button"}
+          disabled={isFormDisabled}
+        >
           {isLoading ? "Entrando..." : "Entrar"}
         </button>
 

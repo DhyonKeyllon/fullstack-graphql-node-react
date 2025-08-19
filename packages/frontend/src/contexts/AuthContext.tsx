@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     initializeAuth();
-  }, [sessionManager]);
+  }, []);
 
   const login = async (
     email: string,
